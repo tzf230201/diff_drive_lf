@@ -1,0 +1,18 @@
+material lf_track/Tes
+{
+  technique
+  {
+    pass
+    {
+      ambient 1.0 1.0 1.0 1.0
+      diffuse 1.0 1.0 1.0 1.0
+      specular 0.01 0.01 0.01 1.0 2.0
+
+      texture_unit
+      {
+        index.png
+        filtering trilinear
+      }
+    }
+  }
+}
