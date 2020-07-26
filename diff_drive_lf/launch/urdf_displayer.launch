@@ -1,16 +1,25 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="model" default="$(find diff_drive_lf)/urdf/08-macroed.urdf.xacro"/>
-  <arg name="rvizconfig" default="$(find diff_drive_lf)/rviz/lf_urdf_rviz_config.rviz" />
+  <arg name="model" default="$(find diff_drive_lf)/urdf/macroed.urdf.xacro"/>
+  <!--<arg name="rvizconfig" default="$(find diff_drive_lf)/rviz/lf_urdf_rviz_config.rviz" />-->
 
-  <include file="$(find diff_drive_lf)/launch/gazebo.launch">
-    <arg name="model" value="$(arg model)" />
+ <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find diff_drive_lf)/worlds/lf_track.world"/>
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="recording" value="false"/>
+    <arg name="debug" value="false"/>
   </include>
 
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" 
+  args="-param robot_description -urdf -x 1.03 -y 1.7 -z 0.2 -Y 4.71 -model macroed" />
+
+  <!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />-->
 
   <rosparam command="load" file="$(find diff_drive_lf)/config/joints.yaml" ns="lf_joint_state_controller"/>
   <rosparam command="load" file="$(find diff_drive_lf)/config/diffdrive.yaml" ns="lf_diff_drive_controller" />
@@ -18,12 +27,12 @@
   <node name="lf_controller_spawner" pkg="controller_manager" type="spawner"
     args="lf_joint_state_controller lf_diff_drive_controller --shutdown-timeout 3"/>
 
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-    respawn="false" output="screen">
-  </node>
+    <node name="controller" pkg="diff_drive_lf" type="tracker.py"
+    respawn="false" output="screen"/>
 
-  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-    <param name="default_topic" value="/lf_diff_drive_controller/cmd_vel"/>
-  </node>
+  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+  </node>-->
+
 
 </launch>

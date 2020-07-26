@@ -49,7 +49,7 @@
         <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
       </geometry>
     </collision>
-    <xacro:default_inertial mass="10.0"/>
+    <xacro:default_inertial mass="5.0"/>
   </link>
 <gazebo reference="base_link">
     <turnGravityOff>false</turnGravityOff>
@@ -130,11 +130,11 @@
 
  <gazebo reference="camera_link">
     <sensor type="camera" name="camera1">
-      <update_rate>30.0</update_rate>
+      <update_rate>60.0</update_rate>
       <camera name="head">
         <horizontal_fov>1.3962634</horizontal_fov>
         <image>
-          <width>800</width>
+          <width>1600</width>
           <height>800</height>
           <format>R8G8B8</format>
         </image>
@@ -153,8 +153,8 @@
       </camera>
       <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
         <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>rrbot/camera1</cameraName>
+        <updateRate>60</updateRate>
+        <cameraName>lf_camera</cameraName>
         <imageTopicName>image_raw</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
         <frameName>camera_link</frameName>
